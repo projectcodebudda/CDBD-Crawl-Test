@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>크롤링 메인 페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>테스트 페이지</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlModal">URL 선택</button>
+    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#publicDataModal">공공 데이터 선택</button>
+</div>
+
+<!-- URL 선택 모달 -->
+<div class="modal fade" id="urlModal" tabindex="-1" role="dialog" aria-labelledby="urlModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="urlModalLabel">URL으로 </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="urlForm" method="post" action="/crawl/url">
+                    <div class="form-group">
+                        <label for="urlInput">URL</label>
+                        <input type="text" class="form-control" id="urlInput" name="url" placeholder="URL을 입력하세요">
+                    </div>
+                    <div class="form-group">
+                        <label for="elementSelect">크롤링할 요소 (예: br, div)</label>
+                        <select class="form-control" id="elementSelect" name="element">
+                            <!-- 자주 사용하는 태그들 -->
+                            <option value="">선택안함</option>
+                            <option value="div">div</option>
+                            <option value="span">span</option>
+                            <option value="a">a</option>
+                            <option value="img">img</option>
+                            <option value="p">p</option>
+                            <option value="li">li</option>
+                            <option value="ul">ul</option>
+                            <option value="ol">ol</option>
+                            <option value="button">button</option>
+                            <option value="input">input</option>
+                            <option value="form">form</option>
+                            <option value="table">table</option>
+                            <option value="tr">tr</option>
+                            <option value="td">td</option>
+                            <option value="th">th</option>
+                            <option value="h1">h1</option>
+                            <option value="h2">h2</option>
+                            <option value="h3">h3</option>
+                            <option value="h4">h4</option>
+                            <option value="h5">h5</option>
+                            <option value="h6">h6</option>
+                            <option value="br">br</option>
+
+                            <!-- 나머지 태그들 -->
+                            <option value="abbr">abbr</option>
+                            <option value="address">address</option>
+                            <option value="area">area</option>
+                            <option value="article">article</option>
+                            <option value="aside">aside</option>
+                            <option value="audio">audio</option>
+                            <option value="base">base</option>
+                            <option value="bdi">bdi</option>
+                            <option value="bdo">bdo</option>
+                            <option value="blockquote">blockquote</option>
+                            <option value="body">body</option>
+                            <option value="canvas">canvas</option>
+                            <option value="caption">caption</option>
+                            <option value="cite">cite</option>
+                            <option value="code">code</option>
+                            <option value="col">col</option>
+                            <option value="colgroup">colgroup</option>
+                            <option value="data">data</option>
+                            <option value="datalist">datalist</option>
+                            <option value="dd">dd</option>
+                            <option value="del">del</option>
+                            <option value="details">details</option>
+                            <option value="dfn">dfn</option>
+                            <option value="dialog">dialog</option>
+                            <option value="dl">dl</option>
+                            <option value="dt">dt</option>
+                            <option value="em">em</option>
+                            <option value="embed">embed</option>
+                            <option value="fieldset">fieldset</option>
+                            <option value="figcaption">figcaption</option>
+                            <option value="figure">figure</option>
+                            <option value="footer">footer</option>
+                            <option value="header">header</option>
+                            <option value="hgroup">hgroup</option>
+                            <option value="hr">hr</option>
+                            <option value="html">html</option>
+                            <option value="i">i</option>
+                            <option value="iframe">iframe</option>
+                            <option value="ins">ins</option>
+                            <option value="kbd">kbd</option>
+                            <option value="label">label</option>
+                            <option value="legend">legend</option>
+                            <option value="main">main</option>
+                            <option value="map">map</option>
+                            <option value="mark">mark</option>
+                            <option value="meta">meta</option>
+                            <option value="meter">meter</option>
+                            <option value="nav">nav</option>
+                            <option value="noscript">noscript</option>
+                            <option value="object">object</option>
+                            <option value="optgroup">optgroup</option>
+                            <option value="option">option</option>
+                            <option value="output">output</option>
+                            <option value="picture">picture</option>
+                            <option value="pre">pre</option>
+                            <option value="progress">progress</option>
+                            <option value="q">q</option>
+                            <option value="rp">rp</option>
+                            <option value="rt">rt</option>
+                            <option value="ruby">ruby</option>
+                            <option value="s">s</option>
+                            <option value="samp">samp</option>
+                            <option value="script">script</option>
+                            <option value="section">section</option>
+                            <option value="select">select</option>
+                            <option value="small">small</option>
+                            <option value="source">source</option>
+                            <option value="strong">strong</option>
+                            <option value="style">style</option>
+                            <option value="sub">sub</option>
+                            <option value="summary">summary</option>
+                            <option value="sup">sup</option>
+                            <option value="svg">svg</option>
+                            <option value="tbody">tbody</option>
+                            <option value="template">template</option>
+                            <option value="textarea">textarea</option>
+                            <option value="tfoot">tfoot</option>
+                            <option value="thead">thead</option>
+                            <option value="time">time</option>
+                            <option value="title">title</option>
+                            <option value="track">track</option>
+                            <option value="u">u</option>
+                            <option value="var">var</option>
+                            <option value="video">video</option>
+                            <option value="wbr">wbr</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="keyword">키워드 입력</label>
+                        <input type="text" class="form-control" id="keyword" name="keyword" placeholder="데이터 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="keyword">식별자 입력</label>
+                        <input type="text" class="form-control" id="tpword" name="tpword" placeholder="데이터 입력">
+                    </div>
+                    <button type="submit" class="btn btn-primary">크롤링 시작</button>
+                </form>
+                <textarea id="urlLog" class="form-control mt-3" rows="5" readonly>
+                    <!-- 크롤링 진행 로그 -->
+                </textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 공공 데이터 선택 모달 -->
+<div class="modal fade" id="publicDataModal" tabindex="-1" role="dialog" aria-labelledby="publicDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="publicDataModalLabel">공공 데이터 크롤링</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="publicDataForm" method="post" action="/crawl/public-data">
+                    <div class="form-group">
+                        <label for="publicDataUrlInput">공공 데이터 URL</label>
+                        <input type="text" class="form-control" id="publicDataUrlInput" name="url" placeholder="URL을 입력하세요">
+                    </div>
+                    <div class="form-group">
+                        <label for="apiKeyInput">공공 데이터 API 키</label>
+                        <input type="text" class="form-control" id="apiKeyInput" name="apiKey" placeholder="API 키를 입력하세요">
+                    </div>
+                    <button type="submit" class="btn btn-primary">크롤링 시작</button>
+                </form>
+                <textarea id="publicDataLog" class="form-control mt-3" rows="5" readonly>
+                    <!-- 크롤링 진행 로그 -->
+                </textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function updateLog(textareaId, log) {
+        document.getElementById(textareaId).value = log;
+    }
+
+    // Handle URL form submission
+    document.getElementById('urlForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        let formData = new FormData(this);
+        let url = formData.get('url');
+        let element = formData.get('element');
+        let word = formData.get('keyword');
+        let tpword = formData.get('tpword');
+
+        fetch('/crawl/url', {
+            method: 'POST',
+            body: JSON.stringify({ url: url, element: element , word:word, tpword:tpword}),
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(response => response.json())
+            .then(data => updateLog('urlLog', data.log))
+            .catch(error => updateLog('urlLog', '크롤링 중 오류 발생: ' + error.message));
+    });
+
+    // Handle public data form submission
+    document.getElementById('publicDataForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        var formData = new FormData(this);
+        var url = formData.get('url');
+        var apiKey = formData.get('apiKey');
+
+        fetch('/crawl/public-data', {
+            method: 'POST',
+            body: JSON.stringify({ url: url, apiKey: apiKey }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(response => response.json())
+            .then(data => updateLog('publicDataLog', data.log))
+            .catch(error => updateLog('publicDataLog', '크롤링 중 오류 발생: ' + error.message));
+    });
+
+</script>
+</body>
+</html>
