@@ -2,6 +2,8 @@ package com.crawl.cdbd_crawl.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,24 +33,22 @@ public class TestController {
         return "store1";
     }
 
-
-
     @PostMapping("/url")
-    public ResponseEntity<Map<String, Object>> crawlUrl(@RequestBody Map<String, String> request) {
+    public ResponseEntity<JSONObject> crawlUrl(@RequestBody Map<String, String> request) throws JSONException {
         String url = request.get("url");
         String keyword = request.get("word");
-        String tpword = request.get("tpword");
+        String identifier = request.get("tpword");
         String element = request.getOrDefault("element", ""); // element가 없을 경우 빈 문자열
 
-        String log = runCrawler("src/main/resources/file/app.exe", url, keyword,tpword, element);
+        String log = runCrawler("src/main/resources/file/app.exe", url, keyword, identifier, element);
 
-        // JSON 문자열을 파싱하여 Map 객체로 변환8
-        Map<String, Object> response = new HashMap<>();
+        JSONObject response = new JSONObject();
         try {
             // JSON 파싱 라이브러리를 이용해 JSON 문자열을 Map으로 변환
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(log);
 
+            // JSON 결과를 Map으로 반환
             response.put("result", jsonNode);
         } catch (Exception e) {
             response.put("error", "Error parsing JSON: " + e.getMessage());
@@ -87,18 +87,19 @@ public class TestController {
     }
 
 
-//    @PostMapping("/public-data")
-//    public ResponseEntity<Map<String, String>> crawlPublicData(@RequestBody Map<String, String> request) {
-//        String url = request.get("url");
-//        String apiKey = request.get("apiKey");
-//
-//        String log = runCrawler("src/main/resources/public_data_crawler.exe", url, apiKey);
-//
-//        Map<String, String> response = new HashMap<>();
-//        response.put("log", log);
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8")
-//                .body(response);
-//    }
+    @PostMapping("/public-data")
+
+    public ResponseEntity<Map<String, String>> crawlPublicData(@RequestBody Map<String, String> request) {
+        String url = request.get("url");
+        String apiKey = request.get("apiKey");
+
+        String log = runCrawler("src/main/resources/public_data_crawler.exe", url, apiKey);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("log", log);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8")
+                .body(response);
+    }
 }
 
