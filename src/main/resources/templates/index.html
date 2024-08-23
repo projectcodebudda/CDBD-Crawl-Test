@@ -222,9 +222,9 @@
     // Handle public data form submission
     document.getElementById('publicDataForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent form submission
-        var formData = new FormData(this);
-        var url = formData.get('url');
-        var apiKey = formData.get('apiKey');
+        let formData = new FormData(this);
+        let url = formData.get('url');
+        let apiKey = formData.get('apiKey');
 
         fetch('/crawl/public-data', {
             method: 'POST',
@@ -236,6 +236,22 @@
             .catch(error => updateLog('publicDataLog', '크롤링 중 오류 발생: ' + error.message));
     });
 
+     document.getElementById('crawlForm').addEventListener('submit', function(event) {
+         // 식별자 입력 필드 값 가져오기
+         let tpwordValue = document.getElementById('tpword').value.trim();
+
+         // 필드가 비어 있으면 경고 메시지를 표시하고 폼 제출을 막음
+         if (tpwordValue === "") {
+             alert("식별자 입력은 필수입니다.");
+             event.preventDefault(); // 폼 제출을 막음
+         } else {
+             // 입력된 값이 있는 경우 확인 창 표시
+             let confirmSelection = confirm("정말 이 식별자값으로 선택하겠습니까?");
+             if (!confirmSelection) {
+                 event.preventDefault(); // 사용자가 취소를 선택하면 폼 제출을 막음
+             }
+         }
+    });
 </script>
 </body>
 </html>
