@@ -36,17 +36,18 @@ public class TestController {
     }
 
     @PostMapping("/url")
-    public void crawlUrl(@RequestBody Map<String, String> request){
+    public ResponseEntity<Void> crawlUrl(@RequestBody Map<String, String> request) {
         try {
+            String url = request.get("url");
+            String keyword = request.get("word");
+            String identifier = request.get("tpword");
+            String element = request.getOrDefault("element", ""); // element가 없을 경우 빈 문자열
 
-        String url = request.get("url");
-        String keyword = request.get("word");
-        String identifier = request.get("tpword");
-        String element = request.getOrDefault("element", ""); // element가 없을 경우 빈 문자열
-
-        runCrawler("src/main/resources/file/app.exe", url, keyword, identifier, element);
-        }catch (Exception e){
+            runCrawler("src/main/resources/file/app.exe", url, keyword, identifier, element);
+            return ResponseEntity.ok().build(); // 성공적인 응답 반환
+        } catch (Exception e) {
             logger.error(e.getMessage());
+            return ResponseEntity.status(500).build(); // 오류 발생 시 500 상태 코드 반환
         }
     }
 
@@ -83,6 +84,11 @@ public class TestController {
 
         runCrawler("src/main/resources/public_data_crawler.exe", url, apiKey);
 
+    }
+
+    @PostMapping("/send")
+    public void sendMessage(@RequestBody String json) {
+        System.out.println(json);
     }
 }
 

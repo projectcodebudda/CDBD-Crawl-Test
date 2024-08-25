@@ -214,9 +214,6 @@
             body: JSON.stringify({ url: url, element: element , word:word, tpword:tpword}),
             headers: { 'Content-Type': 'application/json' }
         })
-            .then(response => response.json())
-            .then(data => updateLog('urlLog', data.log))
-            .catch(error => updateLog('urlLog', '크롤링 중 오류 발생: ' + error.message));
     });
 
     // Handle public data form submission
